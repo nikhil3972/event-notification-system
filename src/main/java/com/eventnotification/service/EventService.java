@@ -3,6 +3,10 @@ package com.eventnotification.service;
 import com.eventnotification.dto.EventRequest;
 import com.eventnotification.enums.EventType;
 import com.eventnotification.model.Event;
+import com.eventnotification.service.processors.EmailProcessor;
+import com.eventnotification.service.processors.PushProcessor;
+import com.eventnotification.service.processors.SmsProcessor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -14,6 +18,15 @@ public class EventService {
     private static final String RECIPIENT_KEY = "recipient";
     private static final String PHONE_KEY = "phoneNumber";
     private static final String DEVICE_KEY = "deviceId";
+
+    @Autowired
+    private EmailProcessor emailProcessor;
+
+    @Autowired
+    private SmsProcessor smsProcessor;
+
+    @Autowired
+    private PushProcessor pushProcessor;
 
     public Event createEvent(EventRequest request) {
         // Validate event type
@@ -27,7 +40,17 @@ public class EventService {
         // Validate payload based on event type
         validatePayload(eventType, request.getPayload());
 
-        return new Event(eventType, request.getPayload(), request.getCallbackUrl());
+        // Create event
+        Event event = new Event(eventType, request.getPayload(), request.getCallbackUrl());
+
+        // Submit to appropriate processor
+        switch (eventType) {
+            case EMAIL -> emailProcessor.processEvent(event);
+            case SMS -> smsProcessor.processEvent(event);
+            case PUSH -> pushProcessor.processEvent(event);
+        }
+
+        return event;
     }
 
     private void validatePayload(EventType eventType, Map<String, Object> payload) {

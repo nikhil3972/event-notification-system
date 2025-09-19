@@ -3,8 +3,10 @@ package com.eventnotification.service.processors;
 import com.eventnotification.enums.EventStatus;
 import com.eventnotification.exception.EventProcessingException;
 import com.eventnotification.model.Event;
+import com.eventnotification.service.CallbackService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 import java.util.Random;
@@ -14,6 +16,9 @@ public abstract class EventProcessor {
     private static final Logger logger = LoggerFactory.getLogger(EventProcessor.class);
     private static final Random random = new Random();
     private static final double FAILURE_RATE = 0.1; // 10% failure rate
+
+    @Autowired
+    protected CallbackService callbackService;
 
     public abstract void processEvent(Event event);
 
@@ -48,6 +53,9 @@ public abstract class EventProcessor {
             event.setErrorMessage(e.getMessage());
             event.setProcessedAt(LocalDateTime.now());
             logger.error("Event {} processing failed: {}", event.getEventId(), e.getMessage());
+        } finally {
+            // Send callback regardless of success or failure
+            callbackService.sendCallback(event);
         }
     }
 }

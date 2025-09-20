@@ -44,3 +44,6 @@ or use Maven directly:
 ```bash
 mvn spring-boot:run
 ```
+
+# Postman Collection
+Import the collection from [event-notification-system](src/main/resources/postman/event-notification-system.postman_collection.json)

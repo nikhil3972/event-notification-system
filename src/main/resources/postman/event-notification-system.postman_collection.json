@@ -1,0 +1,97 @@
+{
+	"info": {
+		"_postman_id": "ea8f0194-f3ce-4a5b-a60e-2181d31d82a4",
+		"name": "Event Notification System",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14484416"
+	},
+	"item": [
+		{
+			"name": "EMAIL",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"eventType\": \"EMAIL\",\r\n\"payload\": { \r\n    \"recipient\": \"nbd@example.com\",\r\n    \"message\": \"Welcome to our service!\"\r\n },\r\n\"callbackUrl\": \"https://my-mock-server.free.beeceptor.com/api/event-status\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/events",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"events"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SMS",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"eventType\": \"SMS\",\r\n\"payload\": { \r\n    \"phoneNumber\": \"+911234567890\",\r\n    \"message\": \"Your OTP is 123456\"\r\n },\r\n\"callbackUrl\": \"https://my-mock-server.free.beeceptor.com/api/event-status\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/events",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"events"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUSH",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"eventType\": \"PUSH\",\r\n\"payload\": { \r\n    \"deviceId\": \"abc-123-xyz\",\r\n    \"message\": \"Your order has been shipped!\"\r\n },\r\n\"callbackUrl\": \"https://my-mock-server.free.beeceptor.com/api/event-status\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/events",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"events"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

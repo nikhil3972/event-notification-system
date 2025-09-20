@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  event-notification-system:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: event-notification-system
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    volumes:
+      - ./logs:/app/logs
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+
+  # Mock webhook receiver for testing callbacks
+  webhook-receiver:
+    image: httpd:2.4-alpine
+    container_name: webhook-receiver
+    ports:
+      - "8090:80"
+    volumes:
+      - ./test-webhook:/usr/local/apache2/htdocs/
+    depends_on:
+      - event-notification-system
